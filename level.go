@@ -12,11 +12,19 @@ const (
     // information deem valuable.
     LevelInfo
 
-    // LevelError -> represents the highest logging level,
+    // LevelWarn -> represents a log between that of basic infomation
+    // and that of of and error.
+    LevelWarn
+
+    // LevelError -> represents the penultimate highest logging level,
     // only used to trace errors.
     LevelError
+
+    // LevelFatal -> represents a log that will cause signifigant
+    // bugs to the program
+    LevelFatal
 )
 
 func main() {
-    
+
 }
