@@ -24,7 +24,3 @@ const (
 	// bugs to the program
 	LevelFatal
 )
-
-func main() {
-
-}
