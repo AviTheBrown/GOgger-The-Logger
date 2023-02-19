@@ -1,11 +1,11 @@
-package GOgger_test
+package  GOgger_test
 
 import (
-	GOgger "Gogger"
+    GOgger "Gogger"
 )
 
 func ExampleLogger_Debug() {
-	dubugLogger := GOgger.New(GOgger.LevelDebug)
-	dubugLogger.Debugf("Hello, %s", "world")
-	// Output : Hello, world
+	debugLogger := GOgger.New(GOgger.LevelDebug)
+    debugLogger.Debugf("Hello, %s", "world")
+    // Output: Hello, world
 }
