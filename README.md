@@ -1,0 +1,1 @@
+In this project i try and build a logging library where a user can interact with the API and log data or any arbitrary information. This is by no means working library at this time (2-19-23) but it could be in the future after interations. 🐹
