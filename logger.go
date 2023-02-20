@@ -1,5 +1,6 @@
 package GOgger
 
+import "fmt"
 
 // Logger struct will hold information needed
     // to log information
@@ -21,7 +22,10 @@ type Logger struct {
     // the Debugf method and manipulate its fields,
     // as its the first argument passed to the Debugf method
 func(l *Logger) Debugf(format string, args ...any) {
-
+    if l.threshold > LevelDebug {
+        return
+    }
+    _, _ = fmt.Printf("Hello world")
 }
 
 func(l *Logger) Infof(format string, args ...any) {
@@ -32,7 +36,7 @@ func(l *Logger) Infof(format string, args ...any) {
 // New -> takes one argument with of the type Level
     // and returns a pointer to a new Logger instance
     // with the threshold field filled with the threshold argument
-    // this will conrrespond to the Level type.
+    // this will correspond to the Level type.
     // *** this function invocation should be the first step in creating a Logger instance ***
 func New(threshold Level) *Logger {
     // creates a new instance of the Logger struct

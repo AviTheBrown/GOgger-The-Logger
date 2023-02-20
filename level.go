@@ -1,6 +1,6 @@
 package GOgger
 
-// Level represents an available logging level
+// Level represents an available logging level.
 type Level byte
 
 const (
