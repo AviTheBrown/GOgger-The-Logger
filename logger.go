@@ -1,6 +1,10 @@
 package GOgger
 
-import "fmt"
+import (
+    "fmt"
+    "io"
+    "os"
+)
 
 // Logger struct will hold information needed
     // to log information
@@ -16,57 +20,91 @@ type Logger struct {
         // to access.
         // no need to expose this field. The internl struct of the logger of the library callers.
     threshold Level
+
+
+    // output will implement the io.Writer so that the user can write to what ever they wish to write to
+        // to log the messages that they have to a network, file, HTTP, etc.
+    output io.Writer
 }
 // Debugf method-> takes no less that one argument
     // the Logger struct instance now can be used by
     // the Debugf method and manipulate its fields,
     // as its the first argument passed to the Debugf method
 func(l *Logger) Debugf(format string, args ...any) {
-    if l.threshold > LevelDebug {
+    // This ensures that there is always a safe output stream to write to.
+    if l.output == nil {
+        l.output = os.Stdout
+    }
+    if l.threshold <= LevelDebug {
         return
     }
-    _, _ = fmt.Printf(format+"\n", args...)
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
 func(l *Logger) Infof(format string, args ...any) {
-    if l.threshold > LevelInfo {
+    // This ensures that there is always a safe output stream to write to.
+    if l.output == nil {
+        l.output = os.Stdout
+    }
+    if l.threshold <= LevelInfo {
         return
     }
-    _, _ = fmt.Printf(format+"\n", args...)
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
 func (l *Logger) Warnf(format string, args ...any) {
-    if l.threshold > LevelWarn {
+    // This ensures that there is always a safe output stream to write to.
+    if l.output == nil {
+        l.output = os.Stdout
+    }
+    if l.threshold <= LevelWarn {
         return
     }
-    _, _ = fmt.Printf(format+"\n", args...)
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
 func (l *Logger) Errorf(format string, args ...any) {
-    if l.threshold > LevelError {
+    // This ensures that there is always a safe output stream to write to.
+    if l.output == nil {
+        l.output = os.Stdout
+    }
+    if l.threshold <= LevelError {
         return
     }
-    _, _ = fmt.Printf(format+"\n", args...)
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
+}
+
+// log -> logs the message to the Stdout.
+    // this is * not * exposed.
+func (l *Logger) log(format string, args ...any) {
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
 func (l *Logger) Fatalf(format string, args ...any) {
-    if l.threshold > LevelFatal {
+    // This ensures that there is always a safe output stream to write to.
+    if l.output == nil {
+        l.output = os.Stdout
+    }
+    if l.threshold <= LevelFatal {
         return
     }
-    _, _ = fmt.Printf(format+"\n", args...)
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
 
 // New -> takes one argument with of the type Level
     // and returns a pointer to a new Logger instance
     // with the threshold field filled with the threshold argument
+    // and outout filled with the io.Writer
+        // the default it Stdout.
     // this will correspond to the Level type.
     // *** this function invocation should be the first step in creating a Logger instance ***
-func New(threshold Level) *Logger {
+func New(threshold Level, output io.Writer) *Logger {
     // creates a new instance of the Logger struct
     // and initializes its fields using a struct literal.
     return &Logger{
         threshold: threshold,
+        output: output,
     }
 }
 
