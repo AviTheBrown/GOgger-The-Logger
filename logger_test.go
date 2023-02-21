@@ -13,3 +13,13 @@ func ExampleLogger_Debugf() {
     // Output:
     // Hello world
 }
+
+// testWriter ->is a struc that implements io.Writer
+type testWriter struct {
+        contents string
+    }
+
+    func (tw *testWriter) Write(p []byte) (n int, err error) {
+        tw.contents = tw.contents + string(p)
+        return len(p), nil
+    }
