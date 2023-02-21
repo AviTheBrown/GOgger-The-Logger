@@ -99,13 +99,18 @@ func (l *Logger) Fatalf(format string, args ...any) {
         // the default it Stdout.
     // this will correspond to the Level type.
     // *** this function invocation should be the first step in creating a Logger instance ***
-func New(threshold Level, output io.Writer) *Logger {
-    // creates a new instance of the Logger struct
-    // and initializes its fields using a struct literal.
-    return &Logger{
-        threshold: threshold,
-        output: output,
+func New(threshold Level, opts ...Option) *Logger {
+    // lgr -> creates a new instance of Logger
+    lgr := &Logger{threshold: threshold, output: os.Stdout}
+
+    // the loop then iterates through the opts slice
+        // and call each of the Option functions with the Logger instance lgr.
+        // Each Option function modifies the lgr as needed, giving the user
+        // the ablility to config the logger with as many args as needed.
+    for _, configFunc := range opts {
+        configFunc(lgr)
     }
+    return lgr
 }
 
 func main(){
