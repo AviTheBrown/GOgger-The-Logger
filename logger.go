@@ -41,6 +41,9 @@ func(l *Logger) Debugf(format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
+// Infof method-> takes no less that one argument,
+// the Logger struct instance now can be used by
+
 func(l *Logger) Infof(format string, args ...any) {
     // This ensures that there is always a safe output stream to write to.
     if l.output == nil {
@@ -52,6 +55,8 @@ func(l *Logger) Infof(format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
+// Warnf method-> takes no less that one argument
+// the Logger struct instance now can be used by
 func (l *Logger) Warnf(format string, args ...any) {
     // This ensures that there is always a safe output stream to write to.
     if l.output == nil {
@@ -63,6 +68,8 @@ func (l *Logger) Warnf(format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
+// Errorf method-> takes no less that one argument
+// the Logger struct instance now can be used by
 func (l *Logger) Errorf(format string, args ...any) {
     // This ensures that there is always a safe output stream to write to.
     if l.output == nil {
@@ -74,6 +81,8 @@ func (l *Logger) Errorf(format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
+// Fatalf method-> takes no less that one argument
+// the Logger struct instance now can be used by
 func (l *Logger) Fatalf(format string, args ...any) {
     // This ensures that there is always a safe output stream to write to.
     if l.output == nil {
@@ -85,10 +94,18 @@ func (l *Logger) Fatalf(format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
 
-// log -> logs the message to the Stdout.
+// logf -> logs the message to the Stdout.
     // this is * not * exposed.
-func (l *Logger) log(format string, args ...any) {
+func (l *Logger) logf(lvl Level, format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
+}
+
+// Logf logs the log.
+func (l *Logger) Logf(lvl Level, format string, args ...any) {
+    if l.threshold > lvl {
+        return
+    }
+    l.logf(lvl, format , args...)
 }
 
 // New -> takes one argument with of the type Level
