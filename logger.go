@@ -35,7 +35,7 @@ func(l *Logger) Debugf(format string, args ...any) {
     if l.output == nil {
         l.output = os.Stdout
     }
-    if l.threshold <= LevelDebug {
+    if l.threshold > LevelDebug {
         return
     }
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
@@ -46,7 +46,7 @@ func(l *Logger) Infof(format string, args ...any) {
     if l.output == nil {
         l.output = os.Stdout
     }
-    if l.threshold <= LevelInfo {
+    if l.threshold > LevelInfo {
         return
     }
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
@@ -57,7 +57,7 @@ func (l *Logger) Warnf(format string, args ...any) {
     if l.output == nil {
         l.output = os.Stdout
     }
-    if l.threshold <= LevelWarn {
+    if l.threshold > LevelWarn {
         return
     }
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
@@ -68,7 +68,18 @@ func (l *Logger) Errorf(format string, args ...any) {
     if l.output == nil {
         l.output = os.Stdout
     }
-    if l.threshold <= LevelError {
+    if l.threshold > LevelError {
+        return
+    }
+    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
+}
+
+func (l *Logger) Fatalf(format string, args ...any) {
+    // This ensures that there is always a safe output stream to write to.
+    if l.output == nil {
+        l.output = os.Stdout
+    }
+    if l.threshold > LevelFatal {
         return
     }
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
@@ -79,18 +90,6 @@ func (l *Logger) Errorf(format string, args ...any) {
 func (l *Logger) log(format string, args ...any) {
     _, _ = fmt.Fprintf(l.output, format+"\n", args...)
 }
-
-func (l *Logger) Fatalf(format string, args ...any) {
-    // This ensures that there is always a safe output stream to write to.
-    if l.output == nil {
-        l.output = os.Stdout
-    }
-    if l.threshold <= LevelFatal {
-        return
-    }
-    _, _ = fmt.Fprintf(l.output, format+"\n", args...)
-}
-
 
 // New -> takes one argument with of the type Level
     // and returns a pointer to a new Logger instance
